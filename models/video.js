@@ -4,7 +4,8 @@ const {Schema, model} = require("mongoose")
 const videoSchema = new Schema ({
     title: String,
     url: String,
-    type: String
+    episodeType: String,
+    episodeDate: Date
 }, {timestamps: true})
 
 //Publish the model
