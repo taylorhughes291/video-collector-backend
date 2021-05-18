@@ -4,6 +4,7 @@
 
 require("dotenv").config()
 const PORT = process.env.PORT
+const NODE_ENV = "development"
 const mongoose = require("./db/connection")
 const cors = require('cors')
 const corsOptions = require("./configs/cors.js")
@@ -16,7 +17,7 @@ const videosRouter = require("./controllers/videos")
 // Middleware
 ////////////////////////////
 
-// NODE_ENV === "production" ? app.use(cors(corsOptions)) : app.use(cors());
+NODE_ENV === "production" ? app.use(cors(corsOptions)) : app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny")); //logging
 
