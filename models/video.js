@@ -2,10 +2,10 @@ const {Schema, model} = require("mongoose")
 
 // Video schema
 const videoSchema = new Schema ({
-    title: String,
-    url: String,
     episodeType: String,
-    episodeDate: Date
+    title: String,
+    episodeDate: Date,
+    url: String
 }, {timestamps: true})
 
 //Publish the model
