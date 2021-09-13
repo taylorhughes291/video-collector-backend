@@ -12,6 +12,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const videosRouter = require("./controllers/videos")
+const usersRouter = require("./controllers/users")
 
 ////////////////////////////
 // Middleware
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 
 // Router re-direct
 app.use("/videos", videosRouter)
+app.use("/users", usersRouter)
 
 // Server listening
 app.listen(PORT, () => {
