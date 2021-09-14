@@ -4,9 +4,10 @@ const { findByIdAndUpdate } = require("../models/user")
 const router = Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const auth = require("../auth")
 
 //Get user route
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     const id = req.params.id
     const user = await User.findById(id)
     res.json({
@@ -79,7 +80,7 @@ router.get('/login/:username/:password', async (req, res) => {
 
 
 // Update route - favorite
-router.put('/favorite/:id', async (req, res) => {
+router.put('/favorite/:id', auth, async (req, res) => {
     const id = req.params.id
     const body = req.body
     let updatedUser
@@ -95,7 +96,7 @@ router.put('/favorite/:id', async (req, res) => {
 })
 
 // Update route - episodes Viewed
-router.put('/viewed/:id', async (req, res) => {
+router.put('/viewed/:id', auth, async (req, res) => {
     const id = req.params.id
     const body = req.body
     let updatedUser
@@ -114,7 +115,7 @@ router.put('/viewed/:id', async (req, res) => {
 
 
 //Delete Route
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     const id = req.params.id
     await Video.findByIdAndDelete(id)
     res.json({
