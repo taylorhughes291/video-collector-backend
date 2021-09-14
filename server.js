@@ -13,6 +13,7 @@ const app = express()
 const morgan = require('morgan')
 const videosRouter = require("./controllers/videos")
 const usersRouter = require("./controllers/users")
+const auth = require("./auth")
 
 ////////////////////////////
 // Middleware

@@ -2,6 +2,8 @@ const User = require("../models/user")
 const {Router} = require('express')
 const { findByIdAndUpdate } = require("../models/user")
 const router = Router()
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 //Get user route
 router.get('/:id', async (req, res) => {
@@ -13,14 +15,66 @@ router.get('/:id', async (req, res) => {
     })
 })
 
-// Create route
+// Post route - Create Account
 router.post('/', async (req, res) => {
     const body = req.body
-    const newUser = await User.create(body)
-    res.json({
-        status: 200,
-        data: newUser
-    })
+    const userCheck = await User.find({username: body.username})
+    if (userCheck.length !== 0) {
+        res.json({
+            status: 403,
+            msg: "User already exists"
+        })
+    } else {
+        try {
+            const hashedPassword = await bcrypt.hash(body.password, 10)
+            const user = {
+                username: body.username,
+                password: hashedPassword
+            }
+            const newUser = await User.create(user)
+            const accessToken = await jwt.sign(JSON.stringify(newUser), process.env.TOKEN_SECRET)
+            res.json({
+                status: 200,
+                accessToken,
+                username: newUser.username
+            })
+        } catch(e) {
+            console.log(e);
+            res.json({message: "Error"})
+        }
+    }
+})
+
+//login verification
+router.get('/login/:username/:password', async (req, res) => {
+    const username = req.params.username
+    const password = req.params.password
+    const user = await User.findOne({username: username})
+    try {
+        if (user) {
+            const match = await bcrypt.compare(password, user.password)
+            const accessToken = await jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET)
+            if (match) {
+                res.json({
+                    accessToken,
+                    status: 200,
+                    user: user._id
+                    })
+            } else {
+                res.json({
+                    status: 403,
+                    msg: "You have entered an incorrect password."
+                })
+            }
+        } else {
+            res.json({
+                status: 409,
+                msg: "This user does not exist."
+            })
+        }
+    } catch(e) {
+        console.log(e);
+    }
 })
 
 

@@ -3,6 +3,7 @@ const {Schema, model} = require("mongoose")
 // Video schema
 const userSchema = new Schema ({
     username: String,
+    password: String,
     favorites: {
         type: Array,
         default: []
