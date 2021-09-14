@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
             res.json({
                 status: 200,
                 accessToken,
-                username: newUser.username
+                user: newUser._id
             })
         } catch(e) {
             console.log(e);
