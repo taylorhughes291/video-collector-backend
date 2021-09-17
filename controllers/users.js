@@ -7,9 +7,10 @@ const jwt = require('jsonwebtoken')
 const auth = require("../auth")
 
 //Get user route
-router.get('/:id', auth, async (req, res) => {
-    const id = req.params.id
-    const user = await User.findById(id)
+router.get('/', auth, async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1]
+    const payload = await jwt.verify(token, process.env.TOKEN_SECRET)
+    const user = await User.findById(payload._id)
     res.json({
         status: 200,
         data: user
