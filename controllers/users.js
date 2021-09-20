@@ -10,7 +10,8 @@ const auth = require("../auth")
 router.get('/', auth, async (req, res) => {
     const token = req.headers.authorization.split(" ")[1]
     const payload = await jwt.verify(token, process.env.TOKEN_SECRET)
-    const user = await User.findById(payload._id)
+    console.log(payload, "this is working");
+    const user = await User.findById(JSON.parse(payload.data)._id)
     res.json({
         status: 200,
         data: user
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
                 password: hashedPassword
             }
             const newUser = await User.create(user)
-            const accessToken = await jwt.sign(JSON.stringify(newUser), process.env.TOKEN_SECRET)
+            const accessToken = await jwt.sign({data: JSON.stringify(newUser)}, process.env.TOKEN_SECRET)
             res.json({
                 status: 200,
                 accessToken,
@@ -55,7 +56,7 @@ router.get('/login/:username/:password', async (req, res) => {
     try {
         if (user) {
             const match = await bcrypt.compare(password, user.password)
-            const accessToken = await jwt.sign(JSON.stringify(user), process.env.TOKEN_SECRET)
+            const accessToken = await jwt.sign({data: JSON.stringify(newUser)}, process.env.TOKEN_SECRET)
             if (match) {
                 res.json({
                     accessToken,

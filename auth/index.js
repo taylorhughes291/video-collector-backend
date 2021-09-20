@@ -12,13 +12,23 @@ const auth = async (req, res, next) => {
                 req.payload = payload
                 next()
             } else {
-                res.status(400).json({error: "VERIFICATION FAILED OR NO PAYLOAD"})
+                res.json({
+                    error: "VERIFICATION FAILED OR NO PAYLOAD",
+                    status: 400
+                })
             }
         } else {
-            res.status(400).json({error: "NO AUTHORIZATION HEADER"})
+            res.json({
+                error: "NO AUTHORIZATION HEADER",
+                status: 400
+            })
         }
     } catch (error) {
-        res.status(400).json({error})
+        res.json({
+            error, 
+            msg: "AUTH ATTEMPT FAILURE",
+            status: 400
+        })
     }
 }
 
