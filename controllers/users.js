@@ -56,7 +56,7 @@ router.get('/login/:username/:password', async (req, res) => {
     try {
         if (user) {
             const match = await bcrypt.compare(password, user.password)
-            const accessToken = await jwt.sign({data: JSON.stringify(newUser)}, process.env.TOKEN_SECRET)
+            const accessToken = await jwt.sign({data: JSON.stringify(user)}, process.env.TOKEN_SECRET)
             if (match) {
                 res.json({
                     accessToken,
